@@ -1,3 +1,4 @@
+import numpy as np
 
 def main():
     with open('DOSCAR', 'r') as infile:
@@ -21,6 +22,18 @@ def main():
                 tmp.append([float(qq) for qq in infile.readline().split()])
             pdoses.append(tmp)
         print(len(pdoses), len(pdoses[0]))
+
+
+def lorentzian(e, gamma):
+    return gamma/(e * e + gamma * gamma)
+
+
+def convolute(x, f, fbr):
+    fsmear = np.zeros(len(x), dtype=np.float)
+    for i in range(len(x)):
+        for j in range(len(x)):
+            fsmear[i] += f[j] * fbr(x[j]-x[i])
+    return fsmear
 
 
 class Atom:
